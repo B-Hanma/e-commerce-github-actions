@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova — Simple E-commerce</title>
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --surface: #ffffff;
+      --text: #171717;
+      --muted: #737373;
+      --line: #e7e7e7;
+      --accent: #111111;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(247, 247, 245, .92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: auto;
+      height: 72px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.06em;
+    }
+
+    nav {
+      display: flex;
+      gap: 28px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    nav a:hover { color: #000; }
+
+    .cart {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 999px;
+      padding: 9px 15px;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .hero {
+      max-width: 1180px;
+      margin: 28px auto 70px;
+      padding: 0 24px;
+    }
+
+    .hero-card {
+      min-height: 500px;
+      border-radius: 28px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.68), rgba(0,0,0,.05)),
+        url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+    }
+
+    .hero-content {
+      color: white;
+      max-width: 560px;
+      padding: 54px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 12px;
+      font-weight: 700;
+      opacity: .8;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: .98;
+      letter-spacing: -.055em;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      color: rgba(255,255,255,.82);
+      font-size: 17px;
+      max-width: 480px;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 22px;
+      font-weight: 700;
+      background: white;
+      color: #111;
+    }
+
+    .section {
+      max-width: 1180px;
+      margin: 0 auto 76px;
+      padding: 0 24px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 30px;
+      letter-spacing: -.04em;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .product {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 35px rgba(0,0,0,.07);
+    }
+
+    .product-image {
+      aspect-ratio: 1 / 1.08;
+      overflow: hidden;
+      background: #eee;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .35s ease;
+    }
+
+    .product:hover img { transform: scale(1.04); }
+
+    .product-info { padding: 17px; }
+
+    .product-info h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .category {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price { font-weight: 750; }
+
+    .add {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: white;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .add:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .banner {
+      border-radius: 24px;
+      padding: 44px;
+      background: #e8e6df;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .banner h2 { max-width: 600px; }
+
+    .dark-btn {
+      background: #111;
+      color: white;
+      white-space: nowrap;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 24px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-inner {
+      max-width: 1180px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 850px) {
+      nav { display: none; }
+      .products { grid-template-columns: repeat(2, 1fr); }
+      .hero-card { min-height: 460px; }
+      .hero-content { padding: 34px; }
+      .banner { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 520px) {
+      .nav { padding: 0 16px; }
+      .hero, .section { padding: 0 16px; }
+      .hero { margin-top: 16px; }
+      .hero-card { min-height: 440px; border-radius: 22px; }
+      .hero-content { padding: 26px; }
+      .products { gap: 12px; }
+      .product-info { padding: 13px; }
+      .section { margin-bottom: 52px; }
+      .banner { padding: 30px; }
+      .footer-inner { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav">
+      <a class="logo" href="#">NOVA.</a>
+
+      <nav>
+        <a href="#">Shop</a>
+        <a href="#">New Arrivals</a>
+        <a href="#">Collections</a>
+        <a href="#">About</a>
+      </nav>
+
+      <button class="cart" aria-label="Shopping cart">Cart (0)</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-card">
+        <div class="hero-content">
+          <div class="eyebrow">New collection · 2026</div>
+          <h1>Everyday things, done better.</h1>
+          <p>
+            Thoughtfully designed essentials for your home, wardrobe, and everyday routine.
+          </p>
+          <a class="btn" href="#products">Shop collection</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="products">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow" style="color:#737373;">Curated for you</div>
+          <h2>Featured products</h2>
+        </div>
+        <span>4 products</span>
+      </div>
+
+      <div class="products">
+        <article class="product">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=85" alt="White cotton t-shirt">
+          </div>
+          <div class="product-info">
+            <h3>Essential Tee</h3>
+            <div class="category">Apparel · White</div>
+            <div class="price-row">
+              <span class="price">₹1,499</span>
+              <button class="add" aria-label="Add Essential Tee to cart">+</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=900&q=85" alt="Neutral clothing collection">
+          </div>
+          <div class="product-info">
+            <h3>Daily Overshirt</h3>
+            <div class="category">Apparel · Sand</div>
+            <div class="price-row">
+              <span class="price">₹2,999</span>
+              <button class="add" aria-label="Add Daily Overshirt to cart">+</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=85" alt="Minimal leather handbag">
+          </div>
+          <div class="product-info">
+            <h3>Everyday Carry</h3>
+            <div class="category">Accessories · Brown</div>
+            <div class="price-row">
+              <span class="price">₹3,499</span>
+              <button class="add" aria-label="Add Everyday Carry to cart">+</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="product">
+          <div class="product-image">
+            <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=900&q=85" alt="Stylish sunglasses">
+          </div>
+          <div class="product-info">
+            <h3>Studio Shades</h3>
+            <div class="category">Accessories · Black</div>
+            <div class="price-row">
+              <span class="price">₹1,999</span>
+              <button class="add" aria-label="Add Studio Shades to cart">+</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="banner">
+        <div>
+          <div class="eyebrow">Simple by design</div>
+          <h2>Free shipping on orders over ₹2,500.</h2>
+        </div>
+        <a href="#products" class="btn dark-btn">Explore products</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 NOVA. All rights reserved.</span>
+      <span>Designed for everyday living.</span>
+    </div>
+  </footer>
+
+  <script>
+    let count = 0;
+    const cart = document.querySelector(".cart");
+
+    document.querySelectorAll(".add").forEach(button => {
+      button.addEventListener("click", () => {
+        count++;
+        cart.textContent = `Cart (${count})`;
+      });
+    });
+  </script>
+
+</body>
+</html>
